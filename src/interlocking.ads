@@ -1,4 +1,6 @@
 package Interlocking is
+   --  Small enums keep impossible spelling variants out of the demo API.
+   --  They are not a substitute for a railway signalling data model.
    --  A deliberately small, deterministic model. These names are local to the
    --  demo layout; they do not describe a real railway installation.
    type Section_Id is (Approach, Junction, Platform, Overlap);

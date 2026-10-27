@@ -1,5 +1,7 @@
 package body Interlocking is
    Sections : Section_Array := (others => Clear);
+   --  This default is convenient for a fresh tabletop scenario. It is not a
+   --  claim that real detection starts clear; callers must own sensor truth.
    Detected_Point : Point_Position := Normal;
    Point_Failed : Boolean := False;
    Point_Locked : Boolean := False;
@@ -32,6 +34,7 @@ package body Interlocking is
    begin
       --  Both illustrative routes share the approach, junction and overlap.
       --  The destination section differs. Fail closed on unknown detection.
+      --  Tiny layout, conservative check: all four modeled sections must clear.
       for Section in Section_Id loop
          if Sections (Section) = Unknown then
             return Rejected_Section_Unknown;
@@ -71,6 +74,8 @@ package body Interlocking is
 
    function Move_Point (Position : Point_Position) return Result_Code is
    begin
+      --  Future me: resist making this look more physical than it is. There is
+      --  no motor, delay, or independent detector hidden behind this call.
       if Point_Failed then
          return Rejected_Point_Failed;
       elsif Point_Locked then
@@ -88,6 +93,8 @@ package body Interlocking is
    function Request_Route (Route : Route_Id) return Result_Code is
       Track_Result : Result_Code;
    begin
+      --  Check exclusion and point proof before even considering a proceed
+      --  route. Rejection is cheap; recovering from a false proceed isn't.
       if State (Route) /= Available then
          return Rejected_Route_Already_Set;
       elsif State (if Route = Main_Route then Diverging_Route else Main_Route)
@@ -114,6 +121,8 @@ package body Interlocking is
 
    function Cancel_Route (Route : Route_Id) return Result_Code is
    begin
+      --  Cancellation is conservative by design. No made-up timeout here;
+      --  if approach is occupied, retain the lock and explain why.
       if State (Route) = Available then
          return Rejected_Route_Not_Set;
       elsif Sections (Approach) = Unknown then

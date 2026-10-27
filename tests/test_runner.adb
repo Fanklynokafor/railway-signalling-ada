@@ -14,6 +14,8 @@ procedure Test_Runner is
       Put_Line ("PASS: " & Label);
    end Check;
 begin
+   --  Reset between scenarios so one failure injection cannot leak into the
+   --  next check. Future me: add a named scenario helper if this list doubles.
    Reset;
    Check (Aspect (Main_Route) = Stop, "unset route stays at stop");
    Set_Point_Detection (Reverse_Position);
