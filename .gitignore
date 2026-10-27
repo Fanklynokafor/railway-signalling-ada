@@ -1,0 +1,10 @@
+bin/
+obj/
+*.ali
+*.o
+*.bexch
+*.cgpr
+*.d
+*.stdout
+*.stderr
+.DS_Store

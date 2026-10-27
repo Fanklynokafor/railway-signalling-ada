@@ -1,0 +1,12 @@
+name = "railway_signalling"
+description = "A safety-scoped railway interlocking simulation prototype in Ada"
+version = "0.1.0-dev"
+authors = ["Franklyn Okafor"]
+maintainers = ["Franklyn Okafor <franklynokafor4@protonmail.ch>"]
+licenses = "MIT"
+website = "https://github.com/Fanklynokafor/railway-signalling-ada"
+tags = ["ada", "railway", "signalling", "simulation"]
+
+[build-profiles]
+development = ["-gnata", "-gnat2022", "-O0", "-g"]
+release = ["-gnata", "-gnat2022", "-O2"]
