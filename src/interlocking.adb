@@ -1,5 +1,5 @@
 package body Interlocking is
-   Sections : Section_Array := (others => Clear);
+   Sections : Section_Array := [others => Clear];
    --  This default is convenient for a fresh tabletop scenario. It is not a
    --  claim that real detection starts clear; callers must own sensor truth.
    Detected_Point : Point_Position := Normal;
@@ -32,9 +32,8 @@ package body Interlocking is
    function Route_Sections_Clear (Route : Route_Id) return Result_Code is
       pragma Unreferenced (Route);
    begin
-      --  Both illustrative routes share the approach, junction and overlap.
-      --  The destination section differs. Fail closed on unknown detection.
-      --  Tiny layout, conservative check: all four modeled sections must clear.
+      --  No branch-specific section map is encoded here; fail closed on any
+      --  unknown detection and conservatively require all four sections clear.
       for Section in Section_Id loop
          if Sections (Section) = Unknown then
             return Rejected_Section_Unknown;
@@ -47,7 +46,7 @@ package body Interlocking is
 
    procedure Reset is
    begin
-      Sections := (others => Clear);
+      Sections := [others => Clear];
       Detected_Point := Normal;
       Point_Failed := False;
       Point_Locked := False;
